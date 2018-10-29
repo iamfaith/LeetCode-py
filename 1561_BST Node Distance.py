@@ -40,36 +40,61 @@ class Solution:
             # print node
         return root
 
-    def findLevel(self, root, val):
-
-        def DFS(cur, val, level):
-            # not find
-            if cur is None:
-                return -1
-
-            if cur.val == val:
-                return level
-            elif cur.val > val:
-                level += 1
-                return DFS(cur.left, val, level)
+    def buildTreeWithMap(self, nums, nodes):
+        root = None
+        self.map = {}
+        # nodes, root = [None if v == 'null' else TreeNode(int(v)) for v in nums], None
+        for node in nums:
+            if root is None:
+                root = TreeNode(int(node))
+                self.map[root.val] = 0
             else:
-                level += 1
-                return DFS(cur.right, val, level)
+                prev, cur, level = None, root, 0
+                while cur is not None:
+                    prev = cur
+                    if node < cur.val:
+                        cur = cur.left
+                    else:
+                        cur = cur.right
+                    level += 1
+                if prev.val > node:
+                    prev.left = TreeNode(int(node))
+                else:
+                    prev.right = TreeNode(int(node))
+                if nodes.__contains__(node):
+                    self.map[node] = level
+        return root
 
-        return DFS(root, val, 0)
+    # def findLevel(self, root, val):
+    #
+    #     def DFS(cur, val, level):
+    #         # not find
+    #         if cur is None:
+    #             return -1
+    #
+    #         if cur.val == val:
+    #             return level
+    #         elif cur.val > val:
+    #             level += 1
+    #             return DFS(cur.left, val, level)
+    #         else:
+    #             level += 1
+    #             return DFS(cur.right, val, level)
+    #
+    #     return DFS(root, val, 0)
 
-    def findLevelLoop(self, cur, val):
-        level = 0
-        while cur is not None:
-            if cur.val == val:
-                return level
-            elif cur.val > val:
-                level += 1
-                cur = cur.left
-            else:
-                level += 1
-                cur = cur.right
-        return -1
+    # def findLevelLoop(self, cur, val):
+    #     level = 0
+    #     while cur is not None:
+    #         if cur.val == val:
+    #             return level
+    #         elif cur.val > val:
+    #             level += 1
+    #             cur = cur.left
+    #         else:
+    #             level += 1
+    #             cur = cur.right
+    #     return -1
 
     def findCommonAncestor(self, nums, n1, n2):
         big, small = max(n1, n2), min(n1, n2)
@@ -87,9 +112,11 @@ class Solution:
         ancestor = self.findCommonAncestor(numbers, node1, node2)
         if ancestor is None:
             return -1
-        root = self.buildTree(numbers)
-        return self.findLevelLoop(root, node1) + self.findLevelLoop(root, node2) - 2 * self.findLevelLoop(root,
-                                                                                                          ancestor)
+        self.buildTreeWithMap(numbers, {node1, node2, ancestor})
+        # return self.findLevelLoop(root, node1) + self.findLevelLoop(root, node2) - 2 * self.findLevelLoop(root,
+        #                                                                                                   ancestor)
+        # print self.map
+        return self.map[node1] + self.map[node2] - 2 * self.map[ancestor]
 
         # tree.drawtree(root)
 
