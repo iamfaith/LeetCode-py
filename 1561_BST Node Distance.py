@@ -20,22 +20,23 @@ class Solution:
     """
 
     def buildTree(self, nums):
-        nodes, root = [None if v == 'null' else TreeNode(int(v)) for v in nums], None
-        for node in nodes:
+        root = None
+        # nodes, root = [None if v == 'null' else TreeNode(int(v)) for v in nums], None
+        for node in nums:
             if root is None:
-                root = node
+                root = TreeNode(int(node))
             else:
                 prev, cur = None, root
                 while cur is not None:
                     prev = cur
-                    if node.val < cur.val:
+                    if node < cur.val:
                         cur = cur.left
                     else:
                         cur = cur.right
-                if prev.val > node.val:
-                    prev.left = node
+                if prev.val > node:
+                    prev.left = TreeNode(int(node))
                 else:
-                    prev.right = node
+                    prev.right = TreeNode(int(node))
             # print node
         return root
 
@@ -94,4 +95,4 @@ class Solution:
 
 
 s = Solution()
-print s.bstDistance([2, 16, 7, 5, 20, 18, 6, 8, 13], 11, 18)
+print s.bstDistance([2, 1, 3], 1, 3)
