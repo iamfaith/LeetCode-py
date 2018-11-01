@@ -2,9 +2,8 @@ from __future__ import print_function
 import tree
 
 
-def printTree(root):
-    q = []
-    q.append(root)
+def traverse_tree(root):
+    q = [root]
     last_node, cur_node = root, root
     while len(q) > 0:
         node = q.pop(0)
@@ -23,4 +22,4 @@ def printTree(root):
 
 root = tree.deserialize('[1,2,3,10,null,4,null,null,5]')
 # tree.drawtree(root)
-printTree(root)
+traverse_tree(root)
